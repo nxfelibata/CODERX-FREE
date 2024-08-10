@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODERXSA || Service Order</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        header .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        header .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        header .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header .social-icons a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5em;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            margin-top: auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .service-option {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select, input[type="url"], button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-family: monospace;
+        }
+
+        #orderCountContainer, #status {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            header, footer {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            header .nav-links, header .social-icons {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            header .social-icons a {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-links">
+            <a href="https://coderxsa.github.io/WEBSITE/assets/servies/service.html">PAID ORDERS</a>
+            <!--<a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About Us</a>-->
+        </nav>
+        <div class="social-icons">
+            <a href="https://wa.me/27717311486" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </header>
+
+    <div class="container">
+        <form id="smmForm">
+            <h1>CODERXSA - FREE</h1>
+            <div class="service-option">
+                <label for="service">Select Service:</label>
+                <select id="service">
+                    <option value="5150">INSTA VIEWS - FREE</option>
+                    <option value="5147">TIKTOK VIEWS - FREE</option>
+                </select>
+            </div>
+
+            <div class="service-option">
+                <label for="link">Enter Link:</label>
+                <input type="url" id="link" placeholder="https://example.com" required>
+            </div>
+
+            <button type="submit">Place Order</button>
+            <div id="result"></div>
+
+            <div id="orderCountContainer">
+                <p>Total Orders Placed: <span id="orderCount">0</span></p>
+            </div>
+
+            <div id="status">
+                <p>Server Status: <span id="serverStatus">Checking...</span></p>
+                <p>Uptime: <span id="uptime">0</span></p>
+                <p>Downtime: <span id="downtime">0</span></p>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 CODERXSA Services. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('smmForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const serviceId = document.getElementById('service').value;
+            const link = document.getElementById('link').value;
+
+            const response = await fetch('/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ serviceId, link })
+            });
+
+            const result = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+
+            // Update the order count in the UI
+            document.getElementById('orderCount').textContent = result.orderCount;
+        });
+
+        async function checkStatus() {
+            const response = await fetch('/status');
+            const statusData = await response.json();
+
+            document.getElementById('serverStatus').textContent = statusData.online ? 'Online' : 'Offline';
+            document.getElementById('serverStatus').style.color = statusData.online ? 'green' : 'red';
+            document.getElementById('uptime').textContent = statusData.uptime;
+            document.getElementById('downtime').textContent = statusData.downtime;
+        }
+
+        checkStatus();
+        setInterval(checkStatus, 60000); // Check status every 60 seconds
+    </script>
+</body>
+</html>
