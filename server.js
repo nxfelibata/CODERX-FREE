@@ -26,7 +26,7 @@ const updateOrderCount = () => {
 // Endpoint to handle the API request for placing an order
 app.post('/order', async (req, res) => {
     const { serviceId, link } = req.body;
-    const apiKey = 'f18fcdfe04d1f7f1fa19bc0690b5f295';  // Replace with your actual API key
+    const apiKey = 'e713d86867fa1515e0c707cce71a40d8';  // Replace with your actual API key
 
     const url = `https://prince.services/api/v2?key=${apiKey}&action=add&service=${serviceId}&link=${link}&quantity=100`;
 
@@ -47,7 +47,7 @@ app.post('/order', async (req, res) => {
 
 // Function to check the server status
 const checkServerStatus = async () => {
-    const apiKey = 'be3dd948362f835e08a0a560c1a2d3d1'; // Replace with your actual API key
+    const apiKey = 'e713d86867fa1515e0c707cce71a40d8'; // Replace with your actual API key
     const serviceId = '5150'; // Replace with the actual service ID for Instagram views
     const instagramLink = 'https://www.instagram.com/reel/C8oMOKPtmS6/?igsh=dHdrOGxucjhreHFi'; // Replace with your actual Instagram video link
     const url = `https://prince.services/api/v2?key=${apiKey}&action=add&service=${serviceId}&link=${instagramLink}&quantity=100`;
