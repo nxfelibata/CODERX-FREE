@@ -4,128 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CODERXSA || Service Order</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Baloo 2', cursive;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
         }
 
         header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
+            background-color: #00fff2;
+            color: #fff;
+            padding: 20px;
+            border-bottom: 5px solid #e100ff;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
         }
 
-        header .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        header .nav-links a {
-            color: white;
+        .nav-links a {
+            color: #000000;
             text-decoration: none;
-            font-size: 1em;
+            margin: 0 15px;
+            font-size: 20px;
+            transition: color 0.3s ease;
         }
 
-        header .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
+        .nav-links a:hover {
+            color: #00ff2a;
         }
 
-        header .social-icons a {
-            color: white;
+        .social-icons a {
+            color: #000000;
             text-decoration: none;
-            font-size: 1.5em;
+            margin: 0 10px;
+            font-size: 28px;
+            transition: color 0.3s ease;
         }
 
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 20px;
-            margin-top: auto;
-        }
-
-        h1 {
-            color: #333;
+        .social-icons a:hover {
+            color: #00ff2a;
         }
 
         .container {
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
+            max-width: 500px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border: 5px solid #000000;
+            position: relative;
+            z-index: 5;
         }
 
-        .service-option {
-            margin-bottom: 20px;
+        h1 {
+            font-size: 30px;
+            margin-bottom: 25px;
+            color: #000000;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             font-weight: bold;
+            color: #000000;
         }
 
         select, input[type="url"], button {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 15px;
+            border: 2px solid #000000;
             box-sizing: border-box;
+            font-size: 18px;
         }
 
         button {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #33cfff;
+            color: #333;
+            border: none;
+            margin-top: 20px;
             cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: bold;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #d400ff;
+            transform: scale(1.05);
         }
 
-        #result {
+        #result, #orderCountContainer, #status {
             margin-top: 20px;
-            font-family: monospace;
+            background-color: #00ff22;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 16px;
+            color: #333;
         }
 
-        #orderCountContainer, #status {
-            margin-top: 20px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 4px;
+        footer {
+            background-color: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-top: 5px solid #00e1ff;
+            margin-top: 50px;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
-            }
-
-            header, footer {
-                padding: 10px;
-                font-size: 0.9em;
-            }
-
-            header .nav-links, header .social-icons {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            header .social-icons a {
-                font-size: 1.2em;
-            }
+        footer p {
+            margin: 0;
         }
     </style>
 </head>
@@ -133,9 +128,6 @@
     <header>
         <nav class="nav-links">
             <a href="https://coderxsa.github.io/WEBSITE/assets/servies/service.html">PAID ORDERS</a>
-            <!--<a href="#services">Services</a>
-            <a href="#contact">Contact</a>
-            <a href="#about">About Us</a>-->
         </nav>
         <div class="social-icons">
             <a href="https://wa.me/27717311486" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -195,7 +187,6 @@
             const result = await response.json();
             document.getElementById('result').textContent = JSON.stringify(result, null, 2);
 
-            // Update the order count in the UI
             document.getElementById('orderCount').textContent = result.orderCount;
         });
 
@@ -210,7 +201,7 @@
         }
 
         checkStatus();
-        setInterval(checkStatus, 60000); // Check status every 60 seconds
+        setInterval(checkStatus, 60000);
     </script>
 </body>
 </html>
