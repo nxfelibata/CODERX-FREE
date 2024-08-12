@@ -338,6 +338,36 @@ app.post('/ttuser', async (req, res) => {
     }
 });
 
+// tiktok comment scrape
+app.post('/ttcomment', async (req, res) => {
+    const { link } = req.body;
+
+    if (!link) {
+        return res.status(400).json({ error: 'Video URL is required' });
+    }
+
+    // Update the URL to point to your PythonAnywhere server
+    const url = `https://teginif471.pythonanywhere.com/ttcomment`;
+
+    try {
+        const response = await axios.post(url, { link }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const { data } = response;
+
+        res.json({
+            videoid: data.videoid,
+            totalComments: data.totalComments,
+            comments: data.comments,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Function to check the server status
 const checkServerStatus = async () => {
     const apiKey = '0461cc517f5975e0ac3e2ce0343d847e'; // Replace with your actual API key
