@@ -300,25 +300,21 @@ app.post('/ttuser', async (req, res) => {
         return res.status(400).json({ error: 'Username is required' });
     }
 
-    const url = `https://www.tiktok.com/@${username}`;
+    // Update the URL to point to the PythonAnywhere server
+    const url = `https://teginif471.pythonanywhere.com/ttuser`;
 
     try {
-        const response = await axios.head(url, {
+        const response = await axios.post(url, { username }, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
-                'Accept': '*/*',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'Origin': 'https://www.tiktok.com',
-                'Referer': `https://www.tiktok.com`,
+                'Content-Type': 'application/json',
             }
         });
 
+        const { status } = response;
         let availability;
-        if (response.status === 200) {
+        if (status === 200) {
             availability = 'taken';
-        } else if (response.status === 404) {
+        } else if (status === 404) {
             availability = 'available';
         } else {
             availability = 'unknown';
@@ -327,7 +323,7 @@ app.post('/ttuser', async (req, res) => {
         res.json({
             username,
             availability,
-            status: response.status,
+            status,
         });
     } catch (error) {
         if (error.response && error.response.status === 404) {
