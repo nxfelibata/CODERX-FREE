@@ -76,7 +76,7 @@
             color: #000000;
         }
 
-        select, input[type="url"], button {
+        select, input[type="url"], input[type="text"], button {
             width: 100%;
             padding: 15px;
             margin-top: 10px;
@@ -142,12 +142,32 @@
                 <select id="service">
                     <option value="5150">INSTA VIEWS - FREE</option>
                     <option value="5147">TIKTOK VIEWS - FREE</option>
+                    <option value="ngl">NGL LINK SPAMMER - FREE</option>
+                    <option value="ttuser">TIKTOK USERNAME CHECKER - FREE</option> <!-- New option -->
                 </select>
             </div>
 
-            <div class="service-option">
+            <div class="service-option" id="linkContainer">
                 <label for="link">Enter Link:</label>
                 <input type="url" id="link" placeholder="https://example.com" required>
+            </div>
+
+            <div class="service-option" id="usernameContainer" style="display: none;">
+                <label for="username">Enter Username:</label>
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+
+            <div class="service-option" id="categoryContainer" style="display: none;">
+                <label for="category">Select Category:</label>
+                <select id="category">
+                    <option value="confessions">Confessions</option>
+                    <option value="3words">3 Words</option>
+                    <option value="wfriendship">W Friendship</option>
+                    <option value="rizzme">Rizz Me</option>
+                    <option value="shipme">Ship Me</option>
+                    <option value="yourcrush">Your Crush</option>
+                    <option value="dealbreaker">Deal Breaker</option>
+                </select>
             </div>
 
             <button type="submit">Place Order</button>
@@ -175,19 +195,55 @@
 
             const serviceId = document.getElementById('service').value;
             const link = document.getElementById('link').value;
+            const username = document.getElementById('username').value;
+            const category = document.getElementById('category').value;
 
-            const response = await fetch('/order', {
+            let endpoint = '/order';
+            let body = { serviceId, link };
+
+            if (serviceId === 'ngl') {
+                endpoint = '/ngl';
+                body = { username, question: 'hello', gameSlug: category };
+            } else if (serviceId === 'ttuser') {
+                endpoint = '/ttuser';
+                body = { username };
+            }
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ serviceId, link })
+                body: JSON.stringify(body)
             });
 
             const result = await response.json();
             document.getElementById('result').textContent = JSON.stringify(result, null, 2);
 
-            document.getElementById('orderCount').textContent = result.orderCount;
+            if (result.orderCount !== undefined) {
+                document.getElementById('orderCount').textContent = result.orderCount;
+            }
+        });
+
+        document.getElementById('service').addEventListener('change', function() {
+            const serviceId = this.value;
+            const linkContainer = document.getElementById('linkContainer');
+            const usernameContainer = document.getElementById('usernameContainer');
+            const categoryContainer = document.getElementById('categoryContainer');
+
+            if (serviceId === 'ngl') {
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'block';
+                categoryContainer.style.display = 'block';
+            } else if (serviceId === 'ttuser') {
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'block';
+                categoryContainer.style.display = 'none';
+            } else {
+                linkContainer.style.display = 'block';
+                usernameContainer.style.display = 'none';
+                categoryContainer.style.display = 'none';
+            }
         });
 
         async function checkStatus() {
