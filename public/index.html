@@ -122,6 +122,7 @@
         footer p {
             margin: 0;
         }
+
     </style>
 </head>
 <body>
@@ -142,10 +143,25 @@
             <div class="service-option">
                 <label for="service">Select Service:</label>
                 <select id="service">
-                    <option value="5150">INSTA VIEWS - FREE</option>
-                    <option value="5147">TIKTOK VIEWS - FREE</option>
-                    <option value="ngl">NGL LINK SPAMMER - FREE</option>
-                    <option value="ttuser">TIKTOK USERNAME CHECKER - FREE</option> <!-- New option -->
+                    <option>ENJOY [CODERXSA]</option>
+
+                    <option class="">┌─━┿INSTA┿━─┐</option>
+                    <option value="5150">INSTA VIEWS</option>
+                    <option>└──━┿──┿━─┘</option>
+
+                    <option >┌─━┿TIKTOK┿━─┐</option>
+                    <option value="5147">TIKTOK VIEWS</option>
+                    <option value="ttuser">TIKTOK USERNAME CHECKER</option>
+                    <option value="ttcomment">TIKTOK COMMENTS SCRAPE</option>
+                    <option>╰──╮TIKTOk LIVE</option>
+                    <option value="">══✿══SHARES - SOON</option>
+                    <option value="">══✿══GET ROOM ID - SOON</option>
+                    <option>└──━┿──┿━─┘</option>
+
+                    <option >┌─━┿OTHER┿━─┐┐</option>
+                    <option value="ngl">NGL LINK SPAMMER</option>
+                    <option>└──━┿──┿━─┘</option>
+
                 </select>
             </div>
 
@@ -209,6 +225,9 @@
             } else if (serviceId === 'ttuser') {
                 endpoint = '/ttuser';
                 body = { username };
+            } else if (serviceId === 'ttcomment') {
+                endpoint = '/ttcomment';
+                body = { link };
             }
 
             const response = await fetch(endpoint, {
@@ -245,7 +264,7 @@
                 linkContainer.style.display = 'block';
                 usernameContainer.style.display = 'none';
                 categoryContainer.style.display = 'none';
-            }
+            } 
         });
 
         async function checkStatus() {
