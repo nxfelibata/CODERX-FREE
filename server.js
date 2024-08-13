@@ -368,6 +368,50 @@ app.post('/ttcomment', async (req, res) => {
     }
 });
 
+// tiktok room id
+app.post('/ttroomid', async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
+    }
+
+    const url = `https://www.tiktok.com/@${username}/live`;
+
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Connection': 'keep-alive',
+            }
+        });
+
+        // Use regex to extract the JSON data from the HTML
+        const scriptRegex = /<script id="SIGI_STATE" type="application\/json">([^<]*)<\/script>/;
+        const match = response.data.match(scriptRegex);
+
+        if (match && match[1]) {
+            const jsonData = match[1].trim();
+            const data = JSON.parse(jsonData);
+            const roomId = data?.LiveRoom?.liveRoomUserInfo?.user?.roomId;
+
+            if (roomId) {
+                res.json({ roomId });
+            } else {
+                res.status(404).json({ error: 'roomId not found in the response' });
+            }
+        } else {
+            res.status(404).json({ error: 'Script content not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 // Function to check the server status
 const checkServerStatus = async () => {
     const apiKey = '0461cc517f5975e0ac3e2ce0343d847e'; // Replace with your actual API key
