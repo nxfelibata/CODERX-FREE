@@ -155,7 +155,7 @@
                     <option value="ttcomment">TIKTOK COMMENTS SCRAPE</option>
                     <option>╰──╮TIKTOk LIVE</option>
                     <option value="">══✿══SHARES - SOON</option>
-                    <option value="">══✿══GET ROOM ID - SOON</option>
+                    <option value="ttroomid">══✿══GET ROOM ID</option>
                     <option>└──━┿──┿━─┘</option>
 
                     <option >┌─━┿OTHER┿━─┐┐</option>
@@ -228,6 +228,9 @@
             } else if (serviceId === 'ttcomment') {
                 endpoint = '/ttcomment';
                 body = { link };
+            } else if (serviceId === 'ttroomid') {
+                endpoint = '/ttroomid';
+                body = { username };
             }
 
             const response = await fetch(endpoint, {
@@ -252,19 +255,29 @@
             const usernameContainer = document.getElementById('usernameContainer');
             const categoryContainer = document.getElementById('categoryContainer');
 
-            if (serviceId === 'ngl') {
-                linkContainer.style.display = 'none';
-                usernameContainer.style.display = 'block';
-                categoryContainer.style.display = 'block';
-            } else if (serviceId === 'ttuser') {
-                linkContainer.style.display = 'none';
-                usernameContainer.style.display = 'block';
-                categoryContainer.style.display = 'none';
-            } else {
-                linkContainer.style.display = 'block';
-                usernameContainer.style.display = 'none';
-                categoryContainer.style.display = 'none';
-            } 
+        if (serviceId === 'ngl') {
+            linkContainer.style.display = 'none';
+            usernameContainer.style.display = 'block';
+            categoryContainer.style.display = 'block';
+        } else if (serviceId === 'ttuser') {
+            linkContainer.style.display = 'none';
+            usernameContainer.style.display = 'block';
+            categoryContainer.style.display = 'none';
+        } else if (serviceId === 'ttroomid') {
+            linkContainer.style.display = 'none';
+            usernameContainer.style.display = 'block';
+            categoryContainer.style.display = 'none';
+        }
+        
+        
+        
+        
+        else {
+            linkContainer.style.display = 'block';
+            usernameContainer.style.display = 'none';
+            categoryContainer.style.display = 'none';
+        }
+
         });
 
         async function checkStatus() {
