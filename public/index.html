@@ -125,6 +125,15 @@
 
     </style>
 </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODERXSA - FREE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
 <body>
     <header>
         <nav class="nav-links">
@@ -145,23 +154,23 @@
                 <select id="service">
                     <option>ENJOY [CODERXSA]</option>
 
-                    <option class="">┌─━┿INSTA┿━─┐</option>
+                    <option>┌─━┿INSTA┿━─┐</option>
                     <option value="5150">INSTA VIEWS</option>
                     <option>└──━┿──┿━─┘</option>
 
-                    <option >┌─━┿TIKTOK┿━─┐</option>
+                    <option>┌─━┿TIKTOK┿━─┐</option>
                     <option value="5147">TIKTOK VIEWS</option>
                     <option value="ttuser">TIKTOK USERNAME CHECKER</option>
                     <option value="ttcomment">TIKTOK COMMENTS SCRAPE</option>
-                    <option>╰──╮TIKTOk LIVE</option>
-                    <option value="">══✿══SHARES - SOON</option>
+                    <option>╰──╮TIKTOK LIVE</option>
+                    <option value="">══✿══SHARES - PATCHED</option>
                     <option value="ttroomid">══✿══GET ROOM ID</option>
                     <option>└──━┿──┿━─┘</option>
 
-                    <option >┌─━┿OTHER┿━─┐┐</option>
+                    <option>┌─━┿OTHER┿━─┐┐</option>
                     <option value="ngl">NGL LINK SPAMMER</option>
+                    <option value="emailbomb">EMAIL BOMB</option> <!-- Added email bomb option -->
                     <option>└──━┿──┿━─┘</option>
-
                 </select>
             </div>
 
@@ -173,6 +182,11 @@
             <div class="service-option" id="usernameContainer" style="display: none;">
                 <label for="username">Enter Username:</label>
                 <input type="text" id="username" placeholder="Username" required>
+            </div>
+
+            <div class="service-option" id="emailContainer" style="display: none;">
+                <label for="email">Enter Email:</label>
+                <input type="email" id="email" placeholder="example@gmail.com" required>
             </div>
 
             <div class="service-option" id="categoryContainer" style="display: none;">
@@ -214,6 +228,7 @@
             const serviceId = document.getElementById('service').value;
             const link = document.getElementById('link').value;
             const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value; // Capturing email input
             const category = document.getElementById('category').value;
 
             let endpoint = '/order';
@@ -231,6 +246,9 @@
             } else if (serviceId === 'ttroomid') {
                 endpoint = '/ttroomid';
                 body = { username };
+            } else if (serviceId === 'emailbomb') { // Handling email bomb service
+                endpoint = '/emailbomb';
+                body = { email };
             }
 
             const response = await fetch(endpoint, {
@@ -253,31 +271,30 @@
             const serviceId = this.value;
             const linkContainer = document.getElementById('linkContainer');
             const usernameContainer = document.getElementById('usernameContainer');
+            const emailContainer = document.getElementById('emailContainer');
             const categoryContainer = document.getElementById('categoryContainer');
 
-        if (serviceId === 'ngl') {
-            linkContainer.style.display = 'none';
-            usernameContainer.style.display = 'block';
-            categoryContainer.style.display = 'block';
-        } else if (serviceId === 'ttuser') {
-            linkContainer.style.display = 'none';
-            usernameContainer.style.display = 'block';
-            categoryContainer.style.display = 'none';
-        } else if (serviceId === 'ttroomid') {
-            linkContainer.style.display = 'none';
-            usernameContainer.style.display = 'block';
-            categoryContainer.style.display = 'none';
-        }
-        
-        
-        
-        
-        else {
-            linkContainer.style.display = 'block';
-            usernameContainer.style.display = 'none';
-            categoryContainer.style.display = 'none';
-        }
-
+            if (serviceId === 'ngl') {
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'block';
+                emailContainer.style.display = 'none';
+                categoryContainer.style.display = 'block';
+            } else if (serviceId === 'ttuser' || serviceId === 'ttroomid') {
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'block';
+                emailContainer.style.display = 'none';
+                categoryContainer.style.display = 'none';
+            } else if (serviceId === 'emailbomb') { // Show email field for email bomb
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'none';
+                emailContainer.style.display = 'block';
+                categoryContainer.style.display = 'none';
+            } else {
+                linkContainer.style.display = 'block';
+                usernameContainer.style.display = 'none';
+                emailContainer.style.display = 'none';
+                categoryContainer.style.display = 'none';
+            }
         });
 
         async function checkStatus() {
