@@ -243,7 +243,7 @@ const updateOrderCount = () => {
 // Endpoint to handle the API request for placing an order
 app.post('/order', async (req, res) => {
     const { serviceId, link } = req.body;
-    const apiKey = '0461cc517f5975e0ac3e2ce0343d847e';  // Replace with your actual API key
+    const apiKey = 'eeb0129622de208a24337b0d286e7a5d';  // Replace with your actual API key
 
     const url = `https://prince.services/api/v2?key=${apiKey}&action=add&service=${serviceId}&link=${link}&quantity=100`;
 
@@ -300,21 +300,25 @@ app.post('/ttuser', async (req, res) => {
         return res.status(400).json({ error: 'Username is required' });
     }
 
-    // Update the URL to point to the PythonAnywhere server
-    const url = `https://teginif471.pythonanywhere.com/ttuser`;
+    const url = `https://www.tiktok.com/@${username}`;
 
     try {
-        const response = await axios.post(url, { username }, {
+        const response = await axios.head(url, {
             headers: {
-                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+                'Accept': '*/*',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Origin': 'https://www.tiktok.com',
+                'Referer': `https://www.tiktok.com`,
             }
         });
 
-        const { status } = response;
         let availability;
-        if (status === 200) {
+        if (response.status === 200) {
             availability = 'taken';
-        } else if (status === 404) {
+        } else if (response.status === 404) {
             availability = 'available';
         } else {
             availability = 'unknown';
@@ -323,7 +327,7 @@ app.post('/ttuser', async (req, res) => {
         res.json({
             username,
             availability,
-            status,
+            status: response.status,
         });
     } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -338,6 +342,7 @@ app.post('/ttuser', async (req, res) => {
     }
 });
 
+
 // tiktok comment scrape
 app.post('/ttcomment', async (req, res) => {
     const { link } = req.body;
@@ -346,27 +351,60 @@ app.post('/ttcomment', async (req, res) => {
         return res.status(400).json({ error: 'Video URL is required' });
     }
 
-    // Update the URL to point to your PythonAnywhere server
-    const url = `https://teginif471.pythonanywhere.com/ttcomment`;
+    let videoid;
+
+    if (link.includes("vm.tiktok.com") || link.includes("vt.tiktok.com")) {
+        try {
+            const redirectResponse = await axios.head(link, { maxRedirects: 10 });
+            videoid = redirectResponse.request.res.responseUrl.split("/")[5].split("?", 1)[0];
+        } catch (error) {
+            return res.status(500).json({ error: 'Failed to retrieve video ID from short link' });
+        }
+    } else {
+        videoid = link.split("/")[5].split("?", 1)[0];
+    }
+
+    let t = 0;
+    let comm_num = 0;
+    let comments = [];
 
     try {
-        const response = await axios.post(url, { link }, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        while (true) {
+            const headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
+                'Referer': `https://www.tiktok.com/@x/video/${videoid}`,
+            };
 
-        const { data } = response;
+            const response = await axios.get(
+                `https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id=${videoid}&count=9999999&cursor=${t}`,
+                { headers }
+            );
+
+            const data = response.data;
+
+            if (!data.comments || data.comments.length === 0) {
+                break;
+            }
+
+            data.comments.forEach(comment => {
+                comments.push(comment.text);
+                comm_num += 1;
+            });
+
+            t += 50;
+        }
 
         res.json({
-            videoid: data.videoid,
-            totalComments: data.totalComments,
-            comments: data.comments,
+            videoid,
+            totalComments: comm_num,
+            comments,
         });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // tiktok room id
 app.post('/ttroomid', async (req, res) => {
@@ -412,6 +450,7 @@ app.post('/ttroomid', async (req, res) => {
 });
 
 
+// email bomb
 app.post('/emailbomb', async (req, res) => {
     const { email, times = 10 } = req.body;
 
@@ -463,9 +502,89 @@ app.post('/emailbomb', async (req, res) => {
 });
 
 
+// Define the /cardgen endpoint
+app.post('/cardgen', async (req, res) => {
+    const { username } = req.body; // Extract username from the request body
+    try {
+      // Define the URL and headers
+      const url = 'https://backend.lambdatest.com/api/dev-tools/credit-card-generator?type=Visa&no-of-cards=1';
+      const headers = {
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/json',
+        'Host': 'backend.lambdatest.com',
+        'Origin': 'https://www.lambdatest.com',
+        'Referer': 'https://www.lambdatest.com/free-online-tools/credit-card-number-generator',
+        'sec-ch-ua': '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36'
+      };
+  
+      // Send the GET request
+      const response = await axios.get(url, { headers });
+  
+      // Check if the request was successful
+      if (response.status === 200) {
+        // Parse the JSON response
+        const data = response.data;
+  
+        // Format the data and include the username
+        const formattedData = data.map(card => ({
+          type: card.type,
+          name: username,
+          number: card.number,  // Use the username as the card number for demonstration
+          cvv: card.cvv,
+          expiry: card.expiry
+        }));
+  
+        // Send the formatted data as a JSON response
+        res.json(formattedData);
+      } else {
+        res.status(response.status).send(`Request failed with status code ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred while processing the request');
+    }
+});
+  
+// mindcraft username checker
+app.post('/mcusername', async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
+    }
+
+    const url = `https://api.mojang.com/users/profiles/minecraft/${username}`;
+
+    try {
+        const response = await axios.get(url);
+        const r_data = response.data;
+
+        if (r_data && r_data.name && r_data.id) {
+            return res.json({ username: r_data.name, uuid: r_data.id, paid: true });
+        } else {
+            return res.json({ username, paid: false });
+        }
+    } catch (error) {
+        return res.json({ username, paid: false });
+    }
+});
+
+
+
+
+
 // Function to check the server status
 const checkServerStatus = async () => {
-    const apiKey = '0461cc517f5975e0ac3e2ce0343d847e'; // Replace with your actual API key
+    const apiKey = 'eeb0129622de208a24337b0d286e7a5d'; // Replace with your actual API key
     const serviceId = '5150'; // Replace with the actual service ID for Instagram views
     const instagramLink = 'https://www.instagram.com/reel/C8oMOKPtmS6/?igsh=dHdrOGxucjhreHFi'; // Replace with your actual Instagram video link
     const url = `https://prince.services/api/v2?key=${apiKey}&action=add&service=${serviceId}&link=${instagramLink}&quantity=100`;
