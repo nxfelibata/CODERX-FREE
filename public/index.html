@@ -195,10 +195,18 @@
 
                     <option>┌─━┿INSTA┿━─┐</option>
                     <option value="5150">INSTA VIEWS</option>
+                    <option value="9999">INSTA FOLLOWERS</option>
+                    <option value="9999">INSTA LIKES</option>
                     <option>└──━┿──┿━─┘</option>
 
                     <option>┌─━┿TIKTOK┿━─┐</option>
                     <option value="5147">TIKTOK VIEWS</option>
+                    <option value="5150">TIKTOK FOLLOWERS</option>
+                    <option value="9999">TIKTOK SHARES</option>
+                    <option value="9999">TIKTOK COMMENTS</option>
+                    <option value="9999">TIKTOK LIKES</option>
+                    <option value="9999">TIKTOK FAVEROUTS</option>
+
                     <option value="ttuser">TIKTOK USERNAME CHECKER</option>
                     <option value="ttcomment">TIKTOK COMMENTS SCRAPE</option>
                     <option>╰──╮TIKTOK LIVE</option>
@@ -209,7 +217,9 @@
                     <option>┌─━┿OTHER┿━─┐┐</option>
                     <option value="ngl">NGL LINK SPAMMER</option>
                     <option value="emailbomb">EMAIL BOMB</option> <!-- Added email bomb option -->
-                    <option value="aibot">Ai Bot</option>
+                    <option value="cardgen">CARD GEN</option>
+                    <option value="mcusername">MINECRAFT USERNAME CHECKER</option>
+                    <option value="psusername">PLAYSTATION USERNAME CHECKER</option>
                     <option>└──━┿──┿━─┘</option>
                 </select>
             </div>
@@ -289,8 +299,14 @@
             } else if (serviceId === 'emailbomb') { // Handling email bomb service
                 endpoint = '/emailbomb';
                 body = { email };
-            } else if (serviceId === 'aibot') { // Handling email bomb service
-                endpoint = '/aibot';
+            } else if (serviceId === 'cardgen') { // Handling card gen service
+                endpoint = '/cardgen';
+                body = { username };
+            } else if (serviceId === 'mcusername') { // Handling card gen service
+                endpoint = '/mcusername';
+                body = { username };
+            }  else if (serviceId === 'psusername') { // Handling card gen service
+                endpoint = '/psusername';
                 body = { username };
             }
 
@@ -322,7 +338,7 @@
                 usernameContainer.style.display = 'block';
                 emailContainer.style.display = 'none';
                 categoryContainer.style.display = 'block';
-            } else if (serviceId === 'ttuser' || serviceId === 'ttroomid' || serviceId === 'aibot') {
+            } else if (serviceId === 'ttuser' || serviceId === 'ttroomid' || serviceId === 'cardgen' || serviceId === 'mcusername' || serviceId === 'psusername') {
                 linkContainer.style.display = 'none';
                 usernameContainer.style.display = 'block';
                 emailContainer.style.display = 'none';
@@ -332,6 +348,7 @@
                 usernameContainer.style.display = 'none';
                 emailContainer.style.display = 'block';
                 categoryContainer.style.display = 'none';
+
             } else {
                 linkContainer.style.display = 'block';
                 usernameContainer.style.display = 'none';
