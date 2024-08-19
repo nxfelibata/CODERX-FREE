@@ -583,30 +583,53 @@ app.post('/mcusername', async (req, res) => {
 
 
 //------- Username Titkok
-// Read the usernames from the file
-const filePath = path.join(__dirname, 'ttuser.txt');
-let users = [];
-function loadUsers() {
+// TikTok User Handling
+const filePathTikTok = path.join(__dirname, 'ttuser.txt');
+let tikTokUsers = [];
+
+function loadTikTokUsers() {
     try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        users = data.split('\n').filter(Boolean);
+        const data = fs.readFileSync(filePathTikTok, 'utf8');
+        tikTokUsers = data.split('\n').filter(Boolean);
     } catch (err) {
-        console.error('Error reading user.txt file:', err);
+        console.error('Error reading ttuser.txt file:', err);
     }
 }
 
 app.get('/getttuser', (req, res) => {
-    if (users.length === 0) {
-        return res.status(500).json({ error: 'No users found in the list.' });
+    if (tikTokUsers.length === 0) {
+        return res.status(500).json({ error: 'No TikTok users found in the list.' });
     }
     
-    const randomUser = users[Math.floor(Math.random() * users.length)];
+    const randomUser = tikTokUsers[Math.floor(Math.random() * tikTokUsers.length)];
     res.json({ user: randomUser });
 });
 
-loadUsers();
-// ----------------------------------------------------
+// Instagram User Handling
+const filePathInsta = path.join(__dirname, 'instauser.txt');
+let instaUsers = [];
 
+function loadInstaUsers() {
+    try {
+        const data = fs.readFileSync(filePathInsta, 'utf8');
+        instaUsers = data.split('\n').filter(Boolean);
+    } catch (err) {
+        console.error('Error reading instauser.txt file:', err);
+    }
+}
+
+app.get('/getiguser', (req, res) => {
+    if (instaUsers.length === 0) {
+        return res.status(500).json({ error: 'No Instagram users found in the list.' });
+    }
+    
+    const randomUser = instaUsers[Math.floor(Math.random() * instaUsers.length)];
+    res.json({ user: randomUser });
+});
+
+// Load users and start server
+loadTikTokUsers();
+loadInstaUsers();;
 
 
 // Function to check the server status
