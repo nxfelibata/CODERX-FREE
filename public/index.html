@@ -220,6 +220,7 @@
                     <option value="cardgen">CARD GEN - ✔️</option>
                     <option value="mcusername">MINECRAFT USERNAME CHECKER - ✔️</option>
                     <option value="gettuser">GET TIKTOK USERNAMES - ✔️</option>
+                    <option value="getiguser">GET INSTA USERNAMES - ✔️</option>
                     <option>└──━┿──┿━─┘</option>
                 </select>
             </div>
@@ -313,6 +314,9 @@
             }  else if (serviceId === 'gettuser') { // Handling ttusernames service
                 endpoint = '/gettuser';
                 body = {  };
+            } else if (serviceId === 'getiguser') { // Handling ttusernames service
+                endpoint = '/getiguser';
+                body = {  };
             }
 
             const response = await fetch(endpoint, {
@@ -363,7 +367,7 @@
                 emailContainer.style.display = 'block';
                 categoryContainer.style.display = 'none';
                 usernameFetchContainer.style.display = 'none';
-            } else if (serviceId === 'gettuser') {
+            } else if (serviceId === 'gettuser' || serviceId === 'getiguser') {
                 linkContainer.style.display = 'none';
                 usernameContainer.style.display = 'none';
                 emailContainer.style.display = 'none';
@@ -392,10 +396,23 @@
         checkStatus();
         setInterval(checkStatus, 60000);
 
-        // Username checker
+        // get Username checker
         document.getElementById('getUsernameBtn').addEventListener('click', async function() {
             try {
                 const response = await fetch('/getttuser');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('usernameDisplay').textContent = `Username: ${data.user}`;
+                } else {
+                    document.getElementById('usernameDisplay').textContent = 'Failed to retrieve username.';
+                }
+            } catch (error) {
+                document.getElementById('usernameDisplay').textContent = 'Error: ' + error.message;
+            }
+        });
+        document.getElementById('getUsernameBtn').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/getiguser');
                 if (response.ok) {
                     const data = await response.json();
                     document.getElementById('usernameDisplay').textContent = `Username: ${data.user}`;
