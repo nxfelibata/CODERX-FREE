@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const path = require('path');
 const app = express();
 
 let isOnline = false;
@@ -579,6 +580,32 @@ app.post('/mcusername', async (req, res) => {
 });
 
 
+
+
+//------- Username Titkok
+// Read the usernames from the file
+const filePath = path.join(__dirname, 'ttuser.txt');
+let users = [];
+function loadUsers() {
+    try {
+        const data = fs.readFileSync(filePath, 'utf8');
+        users = data.split('\n').filter(Boolean);
+    } catch (err) {
+        console.error('Error reading user.txt file:', err);
+    }
+}
+
+app.get('/getttuser', (req, res) => {
+    if (users.length === 0) {
+        return res.status(500).json({ error: 'No users found in the list.' });
+    }
+    
+    const randomUser = users[Math.floor(Math.random() * users.length)];
+    res.json({ user: randomUser });
+});
+
+loadUsers();
+// ----------------------------------------------------
 
 
 
