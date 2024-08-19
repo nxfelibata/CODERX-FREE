@@ -194,32 +194,32 @@
                     <option>ENJOY [CODERXSA]</option>
 
                     <option>┌─━┿INSTA┿━─┐</option>
-                    <option value="5150">INSTA VIEWS</option>
-                    <option value="9999">INSTA FOLLOWERS</option>
-                    <option value="9999">INSTA LIKES</option>
+                    <option value="5150">INSTA VIEWS - ✔️</option>
+                    <option value="9999">INSTA FOLLOWERS - 🔒</option>
+                    <option value="9999">INSTA LIKES - 🔒</option>
                     <option>└──━┿──┿━─┘</option>
 
                     <option>┌─━┿TIKTOK┿━─┐</option>
-                    <option value="5147">TIKTOK VIEWS</option>
-                    <option value="5150">TIKTOK FOLLOWERS</option>
-                    <option value="9999">TIKTOK SHARES</option>
-                    <option value="9999">TIKTOK COMMENTS</option>
-                    <option value="9999">TIKTOK LIKES</option>
-                    <option value="9999">TIKTOK FAVEROUTS</option>
+                    <option value="5147">TIKTOK VIEWS - ✔️</option>
+                    <option value="5150">TIKTOK FOLLOWERS - 🔒</option>
+                    <option value="9999">TIKTOK SHARES - 🔒</option>
+                    <option value="9999">TIKTOK COMMENTS - 🔒</option>
+                    <option value="9999">TIKTOK LIKES - 🔒</option>
+                    <option value="9999">TIKTOK FAVEROUTS - 🔒</option>
 
-                    <option value="ttuser">TIKTOK USERNAME CHECKER</option>
-                    <option value="ttcomment">TIKTOK COMMENTS SCRAPE</option>
+                    <option value="ttuser">TIKTOK USERNAME CHECKER - ✔️</option>
+                    <option value="ttcomment">TIKTOK COMMENTS SCRAPE - ✔️</option>
                     <option>╰──╮TIKTOK LIVE</option>
-                    <option value="">══✿══SHARES - PATCHED</option>
-                    <option value="ttroomid">══✿══GET ROOM ID</option>
+                    <option value="">══✿══SHARES - 🔒</option>
+                    <option value="ttroomid">══✿══GET ROOM ID - ✔️</option>
                     <option>└──━┿──┿━─┘</option>
 
                     <option>┌─━┿OTHER┿━─┐┐</option>
-                    <option value="ngl">NGL LINK SPAMMER</option>
-                    <option value="emailbomb">EMAIL BOMB</option> <!-- Added email bomb option -->
-                    <option value="cardgen">CARD GEN</option>
-                    <option value="mcusername">MINECRAFT USERNAME CHECKER</option>
-                    <option value="psusername">PLAYSTATION USERNAME CHECKER</option>
+                    <option value="ngl">NGL LINK SPAMMER - ✔️</option>
+                    <option value="emailbomb">EMAIL BOMB - ✔️</option> <!-- Added email bomb option -->
+                    <option value="cardgen">CARD GEN - ✔️</option>
+                    <option value="mcusername">MINECRAFT USERNAME CHECKER - ✔️</option>
+                    <option value="gettuser">GET TIKTOK USERNAMES - ✔️</option>
                     <option>└──━┿──┿━─┘</option>
                 </select>
             </div>
@@ -232,6 +232,11 @@
             <div class="service-option" id="usernameContainer" style="display: none;">
                 <label for="username">Enter Username:</label>
                 <input type="text" id="username" placeholder="Username" required>
+            </div>
+
+            <div class="service-option" id="usernameFetchContainer" style="display: none;">
+                <button type="button" id="getUsernameBtn">Get Username</button>
+                <p id="usernameDisplay"></p>
             </div>
 
             <div class="service-option" id="emailContainer" style="display: none;">
@@ -305,9 +310,9 @@
             } else if (serviceId === 'mcusername') { // Handling card gen service
                 endpoint = '/mcusername';
                 body = { username };
-            }  else if (serviceId === 'psusername') { // Handling card gen service
-                endpoint = '/psusername';
-                body = { username };
+            }  else if (serviceId === 'gettuser') { // Handling ttusernames service
+                endpoint = '/gettuser';
+                body = {  };
             }
 
             const response = await fetch(endpoint, {
@@ -332,28 +337,45 @@
             const usernameContainer = document.getElementById('usernameContainer');
             const emailContainer = document.getElementById('emailContainer');
             const categoryContainer = document.getElementById('categoryContainer');
+            const usernameFetchContainer = document.getElementById('usernameFetchContainer'); // New container
 
             if (serviceId === 'ngl') {
                 linkContainer.style.display = 'none';
                 usernameContainer.style.display = 'block';
                 emailContainer.style.display = 'none';
                 categoryContainer.style.display = 'block';
-            } else if (serviceId === 'ttuser' || serviceId === 'ttroomid' || serviceId === 'cardgen' || serviceId === 'mcusername' || serviceId === 'psusername') {
+                usernameFetchContainer.style.display = 'none';
+            } else if (serviceId === 'ttuser') {
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'none'; // Hide the manual username input
+                emailContainer.style.display = 'none';
+                categoryContainer.style.display = 'none';
+                usernameFetchContainer.style.display = 'block'; // Show the "Get Username" button
+            } else if (serviceId === 'ttroomid' || serviceId === 'cardgen' || serviceId === 'mcusername' || serviceId === 'psusername') {
                 linkContainer.style.display = 'none';
                 usernameContainer.style.display = 'block';
                 emailContainer.style.display = 'none';
                 categoryContainer.style.display = 'none';
-            } else if (serviceId === 'emailbomb') { // Show email field for email bomb
+                usernameFetchContainer.style.display = 'none'; // Hide for other services
+            } else if (serviceId === 'emailbomb') {
                 linkContainer.style.display = 'none';
                 usernameContainer.style.display = 'none';
                 emailContainer.style.display = 'block';
                 categoryContainer.style.display = 'none';
+                usernameFetchContainer.style.display = 'none';
+            } else if (serviceId === 'gettuser') {
+                linkContainer.style.display = 'none';
+                usernameContainer.style.display = 'none';
+                emailContainer.style.display = 'none';
+                categoryContainer.style.display = 'none';
+                usernameFetchContainer.style.display = 'block';
 
             } else {
                 linkContainer.style.display = 'block';
                 usernameContainer.style.display = 'none';
                 emailContainer.style.display = 'none';
                 categoryContainer.style.display = 'none';
+                usernameFetchContainer.style.display = 'none';
             }
         });
 
@@ -369,6 +391,21 @@
 
         checkStatus();
         setInterval(checkStatus, 60000);
+
+        // Username checker
+        document.getElementById('getUsernameBtn').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/getttuser');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('usernameDisplay').textContent = `Username: ${data.user}`;
+                } else {
+                    document.getElementById('usernameDisplay').textContent = 'Failed to retrieve username.';
+                }
+            } catch (error) {
+                document.getElementById('usernameDisplay').textContent = 'Error: ' + error.message;
+            }
+        });
     </script>
 </body>
 </html>
